@@ -13,27 +13,27 @@ export class CreateSubjectDto {
   @IsInt()
   id: number;
 
-  @ApiProperty({ example: 'Киргизия' })
+  @ApiProperty({ example: 'Математика' })
   @IsNotEmpty()
   @IsString()
   label: string;
 
-  @ApiProperty({ example: 'Кыргызстан' })
+  @ApiProperty({ example: 'Математика' })
   @IsNotEmpty()
   @IsString()
   label_kg: string;
 
-  @ApiProperty({ example: 'Кыргызстан' })
+  @ApiProperty({ example: 'Математика' })
   @IsNotEmpty()
   @IsString()
   label_kz: string;
 
-  @ApiProperty({ example: `Qirg'iziston` })
+  @ApiProperty({ example: `Matematika` })
   @IsNotEmpty()
   @IsString()
   label_uz: string;
 
-  @ApiProperty({ example: 'Kyrgyzstan' })
+  @ApiProperty({ example: 'Math' })
   @IsNotEmpty()
   @IsString()
   label_en: string;

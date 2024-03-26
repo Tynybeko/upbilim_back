@@ -6,35 +6,33 @@ import { LangEntity } from '../entities/langs.entity';
 export class CreateLangDto {
   @ApiProperty({ example: 1 })
   @Validate(UniqueValidator, [{ table: LangEntity, column: 'id' }], {
-    message: 'Регион с таким id уже существует!',
+    message: 'Язык с таким id уже существует!',
   })
   @IsNotEmpty()
   @IsInt()
   id: number;
 
-
-
-  @ApiProperty({ example: 'Киргизия' })
+  @ApiProperty({ example: 'Русский' })
   @IsNotEmpty()
   @IsString()
   label: string;
 
-  @ApiProperty({ example: 'Кыргызстан' })
+  @ApiProperty({ example: 'Орусча' })
   @IsNotEmpty()
   @IsString()
   label_kg: string;
 
-  @ApiProperty({ example: 'Кыргызстан' })
+  @ApiProperty({ example: `Орусча` })
   @IsNotEmpty()
   @IsString()
   label_kz: string;
 
-  @ApiProperty({ example: `Qirg'iziston` })
+  @ApiProperty({ example: `O'rizcha` })
   @IsNotEmpty()
   @IsString()
   label_uz: string;
 
-  @ApiProperty({ example: 'Kyrgyzstan' })
+  @ApiProperty({ example: 'Russian' })
   @IsNotEmpty()
   @IsString()
   label_en: string;
