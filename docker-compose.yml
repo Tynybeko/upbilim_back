@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15.3-alpine3.18
+    env_file:
+      - .env
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - app
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - app
+    ports:
+      - ${ADMINER_PORT}:8080
+    env_file:
+      - .env
+  redis:
+    image: redis
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - app
+  main:
+    networks:
+      - app
+    build:
+      context: .
+      target: dev
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - adminer
+      - redis
+    command: npm run start:dev
+    volumes:
+      - .:/app:delegated
+      - /app/node_modules
+
+networks:
+  app:
+
+volumes:
+  pgdata:
