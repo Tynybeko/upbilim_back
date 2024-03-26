@@ -9,7 +9,7 @@ import * as sharp from 'sharp';
 
 @Injectable()
 export class FileService {
-  constructor(private config: ConfigService) {}
+  constructor(private config: ConfigService) { }
 
   AWS_S3_BUCKET = this.config.get<string>('AWS_S3_BUCKET');
   logger: Logger = new Logger('FileService');
@@ -80,6 +80,16 @@ export class FileService {
       fs.rmSync(filePath);
     }
   }
+
+  async readJSONFile(file: Express.Multer.File | MemoryStoredFile): Promise<any> {
+    try {
+      const jsonData = JSON.parse(file.buffer.toString());
+      return jsonData;
+    } catch (e) {
+      throw new HttpException('Failed to read JSON file', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 
   async createS3File(
     directory: string,

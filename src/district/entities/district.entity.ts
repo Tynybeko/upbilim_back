@@ -5,19 +5,19 @@ import { CountryEntity } from 'src/country/entities/country.entity';
 
 @Entity('district')
 export class DistrictEntity extends BaseStaticEntity {
-  @Column({ unique: true })
+  @Column({ })
   label: string;
 
-  @Column({ unique: true })
+  @Column({  })
   label_kg: string;
 
-  @Column({ unique: true })
+  @Column({  })
   label_uz: string;
 
-  @Column({ unique: true })
+  @Column({ })
   label_kz: string;
 
-  @Column({ unique: true })
+  @Column({ })
   label_en: string;
 
   @ManyToOne(() => RegionEntity)

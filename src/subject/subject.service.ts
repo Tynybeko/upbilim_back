@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -37,6 +37,39 @@ export class SubjectService {
     const subject = this.subjectRepository.create({ ...rest, ...temp });
     return await this.subjectRepository.save(subject);
   }
+
+
+  async createForJSON(data: any[]) {
+    if (!Array.isArray(data)) throw new BadRequestException({ file: 'Должен быть массив данных!' })
+    const uniqueIds = new Set();
+
+    const result = []
+    for (const item of data) {
+      for (const key in item) {
+        if (!item[key]) {
+          throw new BadRequestException({ file: `Укажите нормальные данные в ${item.id} ID - ${key}` });
+        }
+      }
+      if (uniqueIds.has(item.id)) {
+        throw new BadRequestException({ file: `Дублирующийся элемент с ID: ${item.id}` });
+      } else {
+        uniqueIds.add(item.id);
+      }
+
+
+      await this.utils.getObjectOr404<GroupEntity>(
+        this.groupRepository,
+        { where: { id: item.groupId } },
+        'Group',
+      );
+      item['group'] = item.groupId
+    }
+    for (let item of data) {
+      result.push(await this.create(item))
+    }
+    return result
+  }
+
 
   async findAll(
     query: PaginationQueryDto,

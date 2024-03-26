@@ -5,19 +5,19 @@ import { GroupEntity } from 'src/group/entities/group.entity';
 
 @Entity('subject')
 export class SubjectEntity extends BaseStaticEntity {
-  @Column({ unique: true })
+  @Column({})
   label: string;
 
-  @Column({ unique: true })
+  @Column({})
   label_kg: string;
 
-  @Column({ unique: true })
+  @Column({})
   label_uz: string;
 
-  @Column({ unique: true })
+  @Column({})
   label_kz: string;
 
-  @Column({ unique: true })
+  @Column({})
   label_en: string;
 
   @ManyToMany(() => QuizEntity, (quiz) => quiz.subjects)

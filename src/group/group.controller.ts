@@ -8,6 +8,8 @@ import {
   Delete,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
@@ -17,11 +19,14 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { Roles } from '../auth/decorators/roles-auth.decorator';
 import { UserRolesEnum } from '../user/enums/user-roles.enum';
 import { RoleAuthGuard } from '../auth/guards/role-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileService } from 'src/file/file.service';
 
 @ApiTags('Group')
 @Controller('/groups')
 export class GroupController {
-  constructor(private readonly groupService: GroupService) { }
+  constructor(private readonly groupService: GroupService,
+    private fileService: FileService) { }
 
 
 
@@ -50,6 +55,18 @@ export class GroupController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.groupService.findOne(+id);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Для создание группы по JSON' })
+  @ApiResponse({ status: 200, type: CreateGroupDto })
+  @Roles(UserRolesEnum.ADMIN)
+  @UseGuards(RoleAuthGuard)
+  @Post('JSON')
+  @UseInterceptors(FileInterceptor('file'))
+  async createWithJSON(@UploadedFile() file) {
+    const jsonData = await this.fileService.readJSONFile(file);
+    return this.groupService.createForJSON(jsonData)
   }
 
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCountryDto } from './dto/create-country.dto';
 import { UpdateCountryDto } from './dto/update.country.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -28,14 +28,47 @@ export class CountryService {
     const { ...rest } = query;
     const relationFilterQuery = [];
     return await this.utils.complexRequest<CountryEntity>({
-      entity: 'district',
+      entity: 'country',
       repository: this.countryRepository,
       searchFields: ['label', 'label_kg', 'label_uz', 'label_kz', 'label_en'],
       relationFilterQuery,
-      relations: [{ field: 'region', entity: 'region' }],
       ...rest,
     });
   }
+
+  async createForJSON(data: any[]) {
+    if (!Array.isArray(data)) throw new BadRequestException({file: 'Должен быть массив данных!'})
+    const uniqueIds = new Set();
+    const oldData = await this.findAll({} as CountryQueryDto)
+    const result = []
+    for (const item of data) {
+      for (const key in item) {
+        if (!item[key]) {
+          throw new BadRequestException({ file: `Укажите нормальные данные в ${item.id} ID - ${key}` });
+        }
+      }
+      if (uniqueIds.has(item.id)) {
+        throw new BadRequestException({ file: `Дублирующийся элемент с ID: ${item.id}` });
+      } else {
+        uniqueIds.add(item.id);
+      }
+      let mykey = ''
+      let uniqueData = oldData.data.some(el => {
+        for (let key in el) {
+          if (key != 'id' && el[key] == item[key]) {
+            mykey = key
+            return true
+          }
+        }
+      })
+      if (uniqueData) throw new BadRequestException({ file: `Дублирующийся элемент с ID: ${item.id} в ${mykey}` });
+    }
+    for (let item of data) {
+      result.push(await this.create(item))
+    }
+    return result
+  }
+
 
   async findOne(id: number): Promise<CountryEntity> {
     const district = await this.countryRepository.findOneBy({ id });

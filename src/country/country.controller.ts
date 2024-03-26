@@ -1,3 +1,5 @@
+import { UserRolesEnum } from './../user/enums/user-roles.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   Controller,
   Get,
@@ -8,6 +10,8 @@ import {
   Delete,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CountryService } from './country.service';
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -15,14 +19,16 @@ import { UpdateCountryDto } from './dto/update.country.dto';
 import { PaginationQueryDto } from '../utils/dto/pagination-query.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles-auth.decorator';
-import { UserRolesEnum } from '../user/enums/user-roles.enum';
 import { RoleAuthGuard } from '../auth/guards/role-auth.guard';
 import { CountryQueryDto } from './dto/country-query.dto';
+import { FileService } from 'src/file/file.service';
 
 @ApiTags('Country')
 @Controller('/country')
 export class CountryController {
-  constructor(private readonly districtService: CountryService) { }
+  constructor(private readonly countryService: CountryService,
+    private readonly fileService: FileService
+  ) { }
 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Для создание стран' })
@@ -31,15 +37,27 @@ export class CountryController {
   @UseGuards(RoleAuthGuard)
   @Post()
   create(@Body() createDistrictDto: CreateCountryDto) {
-    return this.districtService.create(createDistrictDto);
+    return this.countryService.create(createDistrictDto);
   }
 
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Для создание стран по JSON' })
+  @ApiResponse({ status: 200, type: CreateCountryDto })
+  @Roles(UserRolesEnum.ADMIN)
+  @UseGuards(RoleAuthGuard)
+  @Post('JSON')
+  @UseInterceptors(FileInterceptor('file'))
+  async createWithJSON(@UploadedFile() file) {
+    const jsonData = await this.fileService.readJSONFile(file);
+    return this.countryService.createForJSON(jsonData)
+  }
 
   @ApiOperation({ summary: 'Для получении всех стран' })
   @ApiResponse({ status: 200, type: [CreateCountryDto] })
   @Get()
   findAll(@Query() query: CountryQueryDto) {
-    return this.districtService.findAll(query);
+    return this.countryService.findAll(query);
   }
 
 
@@ -47,7 +65,7 @@ export class CountryController {
   @ApiResponse({ status: 200, type: CreateCountryDto })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.districtService.findOne(+id);
+    return this.countryService.findOne(+id);
   }
 
   @ApiBearerAuth()
@@ -60,7 +78,7 @@ export class CountryController {
     @Param('id') id: string,
     @Body() updateDistrictDto: UpdateCountryDto,
   ) {
-    return this.districtService.update(+id, updateDistrictDto);
+    return this.countryService.update(+id, updateDistrictDto);
   }
 
   @ApiBearerAuth()
@@ -69,6 +87,6 @@ export class CountryController {
   @ApiOperation({ summary: 'Для удаление страны по ID' })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.districtService.remove(+id);
+    return this.countryService.remove(+id);
   }
 }

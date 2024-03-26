@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDistrictDto } from './dto/create-district.dto';
 import { UpdateDistrictDto } from './dto/update-district.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -73,6 +73,52 @@ export class DistrictService {
       ],
       ...rest,
     });
+  }
+
+  async createForJSON(data: any[]) {
+    const uniqueIds = new Set();
+    const oldData = await this.findAll({} as DistrictQueryDto)
+    const result = []
+    for (const item of data) {
+      for (const key in item) {
+        if (!item[key]) {
+          throw new BadRequestException({ file: `Укажите нормальные данные в ${item.id} ID - ${key}` });
+        }
+      }
+      if (uniqueIds.has(item.id)) {
+        throw new BadRequestException({ file: `Дублирующийся элемент с ID: ${item.id}` });
+      } else {
+        uniqueIds.add(item.id);
+      }
+      let mykey = ''
+      let uniqueData = oldData.data.some(el => {
+        for (let key in el) {
+          if (key != 'id' && el[key] == item[key]) {
+            mykey = key
+            return true
+          }
+        }
+      })
+      if (uniqueData) throw new BadRequestException({ file: `Дублирующийся элемент с ID: ${item.id} в ${mykey}` });
+      await this.utils.getObjectOr404(
+        this.countryRepository,
+        { where: { id: item.countryId } },
+        'Country',
+      )
+      item['country'] = item.countryId
+
+      await this.utils.getObjectOr404(
+        this.regionRepository,
+        { where: { id: item.regionId } },
+        'Country',
+      )
+      item['region'] = item.regionId
+
+    }
+    for (let item of data) {
+      result.push(await this.create(item))
+    }
+    return result
   }
 
   async findOne(id: number): Promise<DistrictEntity> {

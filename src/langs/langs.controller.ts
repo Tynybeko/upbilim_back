@@ -8,21 +8,25 @@ import {
   Delete,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { LangService } from './langs.service';
 import { CreateLangDto } from './dto/create-langs.dto';
 import { UpdateLangDto } from './dto/update.langs.dto';
-import { PaginationQueryDto } from '../utils/dto/pagination-query.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles-auth.decorator';
 import { UserRolesEnum } from '../user/enums/user-roles.enum';
 import { RoleAuthGuard } from '../auth/guards/role-auth.guard';
 import { LangQueryDto } from './dto/langs-query.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileService } from 'src/file/file.service';
 
 @ApiTags('Lang')
 @Controller('/lang')
 export class LangController {
-  constructor(private readonly districtService: LangService) { }
+  constructor(private readonly langService: LangService,
+    private fileService: FileService) { }
 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Для создание языка' })
@@ -31,7 +35,7 @@ export class LangController {
   @UseGuards(RoleAuthGuard)
   @Post()
   create(@Body() createDistrictDto: CreateLangDto) {
-    return this.districtService.create(createDistrictDto);
+    return this.langService.create(createDistrictDto);
   }
 
 
@@ -39,7 +43,7 @@ export class LangController {
   @ApiResponse({ status: 200, type: [CreateLangDto] })
   @Get()
   findAll(@Query() query: LangQueryDto) {
-    return this.districtService.findAll(query);
+    return this.langService.findAll(query);
   }
 
 
@@ -47,7 +51,7 @@ export class LangController {
   @ApiResponse({ status: 200, type: CreateLangDto })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.districtService.findOne(+id);
+    return this.langService.findOne(+id);
   }
 
   @ApiBearerAuth()
@@ -60,7 +64,20 @@ export class LangController {
     @Param('id') id: string,
     @Body() updateDistrictDto: UpdateLangDto,
   ) {
-    return this.districtService.update(+id, updateDistrictDto);
+    return this.langService.update(+id, updateDistrictDto);
+  }
+
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Для создание языков по JSON' })
+  @ApiResponse({ status: 200, type: CreateLangDto })
+  @Roles(UserRolesEnum.ADMIN)
+  @UseGuards(RoleAuthGuard)
+  @Post('JSON')
+  @UseInterceptors(FileInterceptor('file'))
+  async createWithJSON(@UploadedFile() file) {
+    const jsonData = await this.fileService.readJSONFile(file);
+    return this.langService.createForJSON(jsonData)
   }
 
   @ApiBearerAuth()
@@ -69,6 +86,6 @@ export class LangController {
   @ApiOperation({ summary: 'Для удаление языка по ID' })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.districtService.remove(+id);
+    return this.langService.remove(+id);
   }
 }
