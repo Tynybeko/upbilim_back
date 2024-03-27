@@ -3,21 +3,20 @@ import { BaseStaticEntity } from '../../options/base-entity.options';
 
 @Entity('lang')
 export class LangEntity extends BaseStaticEntity {
-  @Column({ unique: true })
+  @Column({ })
   label: string;
 
-  @Column({ unique: true })
+  @Column({  })
   label_kg: string;
 
-  @Column({ unique: true })
+  @Column({ })
   label_uz: string;
 
-  @Column({ unique: true })
+  @Column({ })
   label_kz: string;
 
-  @Column({ unique: true })
+  @Column({ })
   label_en: string;
-
 
   @Column({ unique: true })
   code: string;

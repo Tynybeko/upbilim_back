@@ -27,11 +27,10 @@ export class LangService {
     const { ...rest } = query;
     const relationFilterQuery = [];
     return await this.utils.complexRequest<LangEntity>({
-      entity: 'district',
+      entity: 'lang',
       repository: this.countryRepository,
       searchFields: ['label', 'label_kg', 'label_uz', 'label_kz', 'label_en'],
       relationFilterQuery,
-      relations: [{ field: 'region', entity: 'region' }],
       ...rest,
     });
   }
@@ -46,7 +45,6 @@ export class LangService {
   async createForJSON(data: any[]) {
     if (!Array.isArray(data)) throw new BadRequestException({ file: 'Должен быть массив данных!' })
     const uniqueIds = new Set();
-    const oldData = await this.findAll({} as LangQueryDto)
     const result = []
     for (const item of data) {
       for (const key in item) {
@@ -59,16 +57,6 @@ export class LangService {
       } else {
         uniqueIds.add(item.id);
       }
-      let mykey = ''
-      let uniqueData = oldData.data.some(el => {
-        for (let key in el) {
-          if (key != 'id' && el[key] == item[key]) {
-            mykey = key
-            return true
-          }
-        }
-      })
-      if (uniqueData) throw new BadRequestException({ file: `Дублирующийся элемент с ID: ${item.id} в ${mykey}` });
     }
     for (let item of data) {
       result.push(await this.create(item))

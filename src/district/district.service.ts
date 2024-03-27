@@ -77,7 +77,6 @@ export class DistrictService {
 
   async createForJSON(data: any[]) {
     const uniqueIds = new Set();
-    const oldData = await this.findAll({} as DistrictQueryDto)
     const result = []
     for (const item of data) {
       for (const key in item) {
@@ -90,17 +89,7 @@ export class DistrictService {
       } else {
         uniqueIds.add(item.id);
       }
-      let mykey = ''
-      let uniqueData = oldData.data.some(el => {
-        for (let key in el) {
-          if (key != 'id' && el[key] == item[key]) {
-            mykey = key
-            return true
-          }
-        }
-      })
-      if (uniqueData) throw new BadRequestException({ file: `Дублирующийся элемент с ID: ${item.id} в ${mykey}` });
-      await this.utils.getObjectOr404(
+     await this.utils.getObjectOr404(
         this.countryRepository,
         { where: { id: item.countryId } },
         'Country',
