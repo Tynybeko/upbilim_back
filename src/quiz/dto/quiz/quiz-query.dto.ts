@@ -34,11 +34,6 @@ export class QuizQueryDto extends PaginationQueryDto {
   @IsInt()
   user: number;
 
-  @ApiProperty({ example: false, required: false })
-  @IsOptional()
-  @Transform(({ obj, key }) => obj[key] !== 'false' && obj[key] !== false)
-  @IsBoolean()
-  isORT: boolean;
 
   @ApiProperty({ example: false, required: false })
   @IsOptional()

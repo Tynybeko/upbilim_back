@@ -7,6 +7,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { QueryErrorFilter } from './options/catch-error.options';
 import * as passport from 'passport'
 import * as session from 'express-session';
+import { AllExceptionsFilter } from './utils/exceptions/all-expencive-filter';
 
 
 
@@ -40,7 +41,7 @@ async function bootstrap() {
   app.use(passport.initialize());
 
   app.use(passport.session());
-
+  app.useGlobalFilters(new AllExceptionsFilter())
   // Setting global prefix
   app.setGlobalPrefix(PREFIX);
   const config = app.get(ConfigService);

@@ -179,7 +179,7 @@ export class QuizService {
       limit,
       relationFilterQuery,
       relations: [
-        { entity: 'subject', field: 'subject' },
+        { entity: 'subject', field: 'subjects' },
         { entity: 'user', field: 'user' },
         { entity: 'group', field: 'group' },
         { entity: 'lang', field: 'lang' },
