@@ -6,7 +6,6 @@ import { QuestionEntity } from './entities/question.entity';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { FileModule } from '../file/file.module';
 import { SubjectEntity } from '../subject/entities/subject.entity';
-import { KlassEntity } from '../klass/entities/klass.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UtilsModule } from '../utils/utils.module';
 import { QuizEntity } from './entities/quiz.entity';

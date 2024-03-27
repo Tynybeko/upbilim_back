@@ -27,11 +27,7 @@ export class ParticipantQueryDto extends PaginationQueryDto {
   @Transform(({ obj, key }) => Number(obj[key]))
   subject: number;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsInt()
-  @Transform(({ obj, key }) => Number(obj[key]))
-  klass: number;
+  
 
   @ApiProperty({ required: false })
   @IsOptional()

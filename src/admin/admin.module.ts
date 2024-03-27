@@ -8,7 +8,6 @@ import { UserRolesEnum } from '../user/enums/user-roles.enum';
 import { userAdminOptions } from './resources/user.admin';
 import { quizAdminOptions } from './resources/quiz.admin';
 import { answerAdminOptions } from './resources/answer.admin';
-import { klassAdminOptions } from './resources/klass.admin';
 import { subjectAdminOptions } from './resources/subject.admin';
 import { questionAdminOptions } from './resources/question.admin';
 import { Database, Resource } from '@adminjs/typeorm';
@@ -27,7 +26,6 @@ AdminJS.registerAdapter({ Database, Resource: Resource });
             userAdminOptions,
             quizAdminOptions,
             answerAdminOptions,
-            klassAdminOptions,
             subjectAdminOptions,
             questionAdminOptions,
             postAdminOptions,

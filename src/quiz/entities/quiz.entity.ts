@@ -10,7 +10,6 @@ import {
   RelationId,
 } from 'typeorm';
 import { SubjectEntity } from '../../subject/entities/subject.entity';
-import { KlassEntity } from '../../klass/entities/klass.entity';
 import { QuestionEntity } from './question.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { GroupEntity } from 'src/group/entities/group.entity';

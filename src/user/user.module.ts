@@ -17,6 +17,7 @@ import { TeacherService } from './services/teacher.service';
 import { SchoolEntity } from '../school/entities/school.entity';
 import { GroupEntity } from '../group/entities/group.entity';
 import { ParticipantEntity } from '../testing/entities/participant.entity';
+import { DistrictEntity } from 'src/district/entities/district.entity';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ParticipantEntity } from '../testing/entities/participant.entity';
       SchoolEntity,
       UserEntity,
       ParticipantEntity,
+      DistrictEntity,
     ]),
     forwardRef(() => AuthModule),
     FileModule,

@@ -14,4 +14,17 @@ export class SchoolQueryDto extends PaginationQueryDto {
   @Transform(({ obj, key }) => Number(obj[key]))
   @IsInt()
   district: number;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @Transform(({ obj, key }) => Number(obj[key]))
+  @IsInt()
+  region: number;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @Transform(({ obj, key }) => Number(obj[key]))
+  @IsInt()
+  country: number;
+
 }

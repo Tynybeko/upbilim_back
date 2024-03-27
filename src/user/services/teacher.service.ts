@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { UpdateTeacherDto } from '../dto/teacher/update-teacher.dto';
 import { UserRolesEnum } from '../enums/user-roles.enum';
+import { DistrictEntity } from 'src/district/entities/district.entity';
 
 @Injectable()
 export class TeacherService {
@@ -23,10 +24,12 @@ export class TeacherService {
     private userRepository: Repository<UserEntity>,
     @InjectRepository(TeacherEntity)
     private teacherRepository: Repository<TeacherEntity>,
-  ) {}
+    @InjectRepository(DistrictEntity)
+    private districtRepository: Repository<DistrictEntity>,
+  ) { }
 
   async create(createTeacherDto: CreateTeacherDto): Promise<TeacherEntity> {
-    const { school, user } = createTeacherDto;
+    const { school,  user } = createTeacherDto;
     const userInstance = await this.utils.getObjectOr404<UserEntity>(
       this.userRepository,
       { where: { id: user } },
@@ -45,7 +48,7 @@ export class TeacherService {
       { where: { id: school } },
       'School',
     );
-
+    
     teacher.user = userInstance;
 
     return await this.teacherRepository.save(teacher);

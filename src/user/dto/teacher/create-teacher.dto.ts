@@ -12,4 +12,5 @@ export class CreateTeacherDto {
   @Transform(({ obj, key }) => Number(obj[key]))
   @IsInt()
   school: number;
+
 }

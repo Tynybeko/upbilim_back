@@ -7,7 +7,6 @@ import { join } from 'path';
 import { UtilsModule } from './utils/utils.module';
 import { typeormOptions } from './options/typeorm.options';
 import { QuizModule } from './quiz/quiz.module';
-// import { KlassModule } from './klass/klass.module';
 import { SubjectModule } from './subject/subject.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { AuthModule } from './auth/auth.module';
@@ -66,7 +65,6 @@ import { LangModule } from './langs/langs.module';
     UserModule,
     UtilsModule,
     QuizModule,
-    // KlassModule,
     SubjectModule,
     TestingModule,
     PostModule,

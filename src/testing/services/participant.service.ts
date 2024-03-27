@@ -27,7 +27,7 @@ export class ParticipantService {
     private testingRepository: Repository<TestingEntity>,
     private utils: UtilsService,
     private testingGateway: TestingGateway,
-  ) {}
+  ) { }
 
   async create(
     createParticipantDto: CreateParticipantDto,
@@ -67,7 +67,7 @@ export class ParticipantService {
   async findAll(
     query: ParticipantQueryDto,
   ): Promise<IComplexRequest<ParticipantEntity[]>> {
-    const { testing, user, search, klass, subject, group, limit, offset } =
+    const { testing, user, search, subject, group, limit, offset } =
       query;
     const relationFilterQuery = [];
 
@@ -82,13 +82,6 @@ export class ParticipantService {
       relationFilterQuery.push({
         query: 'user.id = :id',
         value: { id: user },
-      });
-    }
-
-    if (klass) {
-      relationFilterQuery.push({
-        query: 'klass.id = :id',
-        value: { id: klass },
       });
     }
 
@@ -113,13 +106,11 @@ export class ParticipantService {
         { field: 'user', entity: 'user' },
         { field: 'user.student', entity: 'student' },
         { field: 'user.teacher', entity: 'teacher' },
-        { field: 'user.student.group', entity: 'group' },
-        { field: 'user.student.group.school', entity: 'school' },
-        { field: 'user.student.group.school.district', entity: 'district' },
+        { field: 'user.teacher.school', entity: 'school' },
+        { field: 'user.teacher.school.district', entity: 'district' },
         { field: 'testing', entity: 'testing' },
         { field: 'testing.quiz', entity: 'quiz' },
         { field: 'testing.quiz.subjects', entity: 'subject' },
-        { field: 'testing.quiz.klasses', entity: 'klass' },
       ],
       search,
       searchFields: ['name'],
@@ -137,15 +128,11 @@ export class ParticipantService {
         'testing',
         'selectedAnswers',
         'testing.quiz',
-        'testing.quiz.klasses',
         'testing.quiz.subjects',
         'user.teacher',
         'user.teacher.school',
         'user.teacher.school.district',
         'user.student',
-        'user.student.group',
-        'user.student.group.school',
-        'user.student.group.school.district',
       ],
     });
 

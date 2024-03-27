@@ -17,25 +17,27 @@ export class SchoolService {
     @InjectRepository(DistrictEntity)
     private districtRepository: Repository<DistrictEntity>,
     private utils: UtilsService,
-  ) {}
+  ) { }
 
   async create(createSchoolDto: CreateSchoolDto): Promise<SchoolEntity> {
     const { district, ...rest } = createSchoolDto;
     const temp = {};
 
-    temp['district'] = await this.utils.getObjectOr404<DistrictEntity>(
+    const myDistrict = await this.utils.getObjectOr404<DistrictEntity>(
       this.districtRepository,
       { where: { id: district } },
       'district',
     );
-
+    temp['district'] = myDistrict
+    temp['country'] = myDistrict.country
+    temp['region'] = myDistrict.region
     return await this.schoolRepository.save({ ...rest, ...temp });
   }
 
   async findAll(
     query: SchoolQueryDto,
   ): Promise<IComplexRequest<SchoolEntity[]>> {
-    const { search, district, offset, limit } = query;
+    const { search, district, region, country, offset, limit } = query;
     const relationFilterQuery = [];
 
     if (district) {
@@ -44,7 +46,20 @@ export class SchoolService {
         value: { id: district },
       });
     }
+    if (region) {
+      relationFilterQuery.push({
+        query: 'region.id = :id',
+        value: { id: region },
+      });
+    }
+    if (country) {
+      relationFilterQuery.push({
+        query: 'country.id = :id',
+        value: { id: country },
+      });
+    }
 
+    
     return await this.utils.complexRequest<SchoolEntity>({
       entity: 'school',
       repository: this.schoolRepository,
