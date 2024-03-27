@@ -41,7 +41,7 @@ async function bootstrap() {
   app.use(passport.initialize());
 
   app.use(passport.session());
-  app.useGlobalFilters(new AllExceptionsFilter())
+  // app.useGlobalFilters(new AllExceptionsFilter())
   // Setting global prefix
   app.setGlobalPrefix(PREFIX);
   const config = app.get(ConfigService);

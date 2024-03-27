@@ -408,7 +408,7 @@ export class AuthController {
     if (!check) {
       throw new UnauthorizedException()
     }
-    return this.authService.loginWithAcces(acces)
+    return await this.authService.loginWithAcces(acces)
   }
 
   @UseGuards(LocalAuthGuard)
