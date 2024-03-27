@@ -206,24 +206,20 @@ export class AuthService {
 
 
   async googleValidate(googleDto: GoogleAuthDto) {
-    try {
-      const checkUser = await this.userRepository.findOne({ where: { email: googleDto.email } })
-      if (checkUser) {
-        return this.validateUser(checkUser.email, process.env.PASSWORD_FOR_ACCOUNT_GOOGLE)
-      }
-
-      const newUser: RegisterDto = {
-        username: googleDto.id,
-        lastName: googleDto.familyName,
-        firstName: googleDto.givenName,
-        password: process.env.PASSWORD_FOR_ACCOUNT_GOOGLE,
-        role: UserRolesEnum.USER,
-        email: googleDto.email,
-        phone: null,
-      }
-      return this.register(newUser, null)
-    } catch (err) {
-
+    const checkUser = await this.userRepository.findOne({ where: { email: googleDto.email } })
+    if (checkUser) {
+      const user = await this.validateUser(checkUser.email, process.env.PASSWORD_FOR_ACCOUNT_GOOGLE)
+      return await this.login(user)
     }
+    const newUser: RegisterDto = {
+      username: googleDto.id,
+      lastName: googleDto.familyName,
+      firstName: googleDto.givenName,
+      password: process.env.PASSWORD_FOR_ACCOUNT_GOOGLE,
+      role: UserRolesEnum.USER,
+      email: googleDto.email,
+      phone: null,
+    }
+    return this.register(newUser, null)
   }
 }
