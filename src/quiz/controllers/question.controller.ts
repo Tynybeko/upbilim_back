@@ -27,9 +27,10 @@ export class QuestionController {
   constructor(
     private questionService: QuestionService,
     private rateSystemService: RateSystemService,
-  ) {}
+  ) { }
 
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Post()
   @FormDataRequest()
   async create(
