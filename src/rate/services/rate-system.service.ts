@@ -149,7 +149,7 @@ export class RateSystemService {
 
   async checkUserRateExpiration(userRate: UserRateEntity): Promise<boolean> {
     const now = new Date();
-    return userRate.validity > now;
+    return userRate?.validity > now;
   }
 
   async checkQuizzersAmount(

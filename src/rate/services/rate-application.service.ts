@@ -86,6 +86,7 @@ export class RateApplicationService {
     userId: number,
   ): Promise<RateApplicationEntity> {
     const { rate, ...rest } = createRateApplicationDto;
+    
     const temp = {};
     temp['user'] = await this.utils.getObjectOr404<UserEntity>(
       this.userRepository,

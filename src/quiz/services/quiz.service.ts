@@ -97,7 +97,7 @@ export class QuizService {
     if (subject) {
       const mySubject = await this.utils.getObjectOr404<SubjectEntity>(
         this.subjectRepository,
-        { where: { id: subject } },
+        { where: { id: subject }, relations: ['group',] },
         'Subject',
       );
       temp['subject'] = mySubject
