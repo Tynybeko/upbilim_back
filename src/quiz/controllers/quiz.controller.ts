@@ -31,12 +31,14 @@ export class QuizController {
     private rateSystemService: RateSystemService,
   ) {}
 
+
+
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Post()
   @FormDataRequest()
+  @Post()
   async create(@Body() createQuizDto: CreateQuizDto, @User() user: UserEntity) {
-    if (user.id !== +createQuizDto.user && user.role !== UserRolesEnum.ADMIN) {
+    if (user?.id !== +createQuizDto?.user && user?.role !== UserRolesEnum.ADMIN) {
       throw new BadRequestException({
         message: 'You cannot create quiz for other user',
       });

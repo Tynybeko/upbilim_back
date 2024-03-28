@@ -10,7 +10,6 @@ export class RoleAuthGuard extends JwtAuthGuard {
   }
   async canActivate(context: ExecutionContext): Promise<any> {
     const previousResult = await super.canActivate(context);
-    return true
     if (!previousResult) {
       return false;
     }

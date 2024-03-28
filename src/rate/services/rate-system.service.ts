@@ -240,9 +240,10 @@ export class RateSystemService {
   ) {
     if (quiz.subject) {
       const allowedSubjects = rate.subjects;
-      const subjects = await this.subjectRepository.findBy({
-        id: quiz.subject,
-      });
+      const subjects = await this.subjectRepository.findBy(
+        {
+          id: quiz.subject,
+        });
       subjects.forEach((item) => {
         const isHad = allowedSubjects.some(
           (allowedSubject) => allowedSubject.id === item.id,

@@ -94,7 +94,6 @@ export class QuizService {
     // this.validateCreation(dto);
     const { image, icon, subject, lang, user, ...rest } = dto;
     const temp = { image: null };
-
     if (subject) {
       const mySubject = await this.utils.getObjectOr404<SubjectEntity>(
         this.subjectRepository,
