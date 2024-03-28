@@ -208,8 +208,7 @@ export class AuthService {
   async googleValidate(googleDto: GoogleAuthDto) {
     const checkUser = await this.userRepository.findOne({ where: { email: googleDto.email } })
     if (checkUser) {
-      const user = await this.validateUser(checkUser.email, process.env.PASSWORD_FOR_ACCOUNT_GOOGLE)
-      return await this.login(user)
+      return this.login(checkUser)
     }
     const newUser: RegisterDto = {
       username: googleDto.id,
