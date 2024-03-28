@@ -196,7 +196,7 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Токен не действителен')
     }
-    const logineduser = await this.validateUser(typeof user == 'object' ? user.email : '', this.config.get<string>('PASSWORD_FOR_ACCOUNT_GOOGLE'),)
+    const logineduser = await this.validateUser(typeof user == 'object' ? user.username : '', this.config.get<string>('PASSWORD_FOR_ACCOUNT_GOOGLE'),)
     return this.login(logineduser)
   }
 
