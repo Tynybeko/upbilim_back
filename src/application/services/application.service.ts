@@ -55,7 +55,11 @@ export class ApplicationService {
             },
         }, 'User')
         myApplication.status = dto.status
-
+        const user = await this.userRepository.findOne({where: {id: myApplication.user.id}})
+        if (user) {
+            user.role = UserRolesEnum.TEACHER
+            this.userRepository.save(user)
+        }
         await this.teacherAppRepository.save(myApplication)
         return await this.getOneTeacherApplicationsWithId(myApplication.id)
     }
