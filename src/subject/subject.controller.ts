@@ -39,9 +39,9 @@ export class SubjectController {
     return this.categoryService.create(createCategoryDto);
   }
 
-  @ApiBearerAuth()
-  @Roles(UserRolesEnum.ADMIN, UserRolesEnum.MANAGER)
-  @UseGuards(RoleAuthGuard)
+
+  
+
   @Get()
   findAll(@Query() query: PaginationQueryDto) {
     return this.categoryService.findAll(query);
