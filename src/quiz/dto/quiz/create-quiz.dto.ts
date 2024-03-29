@@ -17,9 +17,6 @@ import {
   MaxFileSize,
   MemoryStoredFile,
 } from 'nestjs-form-data';
-import { SubjectEntity } from 'src/subject/entities/subject.entity';
-import { UniqueValidator } from 'src/validators/unique.validator';
-import { LangEntity } from 'src/langs/entities/langs.entity';
 
 export class CreateQuizDto {
   @ApiProperty({ example: 'Title of quiz' })
@@ -58,13 +55,6 @@ export class CreateQuizDto {
   @IsNumber({}, { each: true })
   lang: number;
 
-
-  // @ApiProperty({ type: [CreateQuestionDto] })
-  // @IsNotEmpty()
-  // @IsArray()
-  // @ValidateNested({ each: true })
-  // @Type(() => CreateQuestionDto)
-  // questions: CreateQuestionDto[];
 
   @ApiProperty({ example: 30 })
   @Transform(({ obj, key }) => Number(obj[key]))

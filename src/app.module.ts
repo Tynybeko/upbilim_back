@@ -24,6 +24,7 @@ import { RegionModule } from './region/region.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CountryModule } from './country/country.module'
 import { LangModule } from './langs/langs.module';
+import { ApplicationModule } from './application/application.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -75,7 +76,8 @@ import { LangModule } from './langs/langs.module';
     GroupModule,
     RegionModule,
     CountryModule,
-    LangModule
+    LangModule,
+    ApplicationModule,
   ],
 })
 export class AppModule { }
