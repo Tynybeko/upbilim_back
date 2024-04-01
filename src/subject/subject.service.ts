@@ -78,6 +78,9 @@ export class SubjectService {
       entity: 'subject',
       repository: this.subjectRepository,
       searchFields: ['label', 'label_kg', 'label_uz', 'label_kz', 'label_en'],
+      relations: [
+        { entity: 'group', field: 'group' },
+      ],
       ...query,
     });
   }
