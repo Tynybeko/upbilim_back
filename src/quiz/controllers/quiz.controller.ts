@@ -43,7 +43,7 @@ export class QuizController {
         message: 'You cannot create quiz for other user',
       });
     }
-    await this.rateSystemService.checkQuizCreation(user, createQuizDto);
+    // await this.rateSystemService.checkQuizCreation(user, createQuizDto);
     return this.quizService.create(createQuizDto);
   }
 
