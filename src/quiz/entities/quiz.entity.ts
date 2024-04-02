@@ -29,11 +29,11 @@ export class QuizEntity extends BaseEntity {
   @Column({ nullable: true })
   icon: string;
 
-  @ManyToMany(() => SubjectEntity, (subject) => subject.quizzers, {
+  @ManyToOne(() => SubjectEntity, (subject) => subject.quizzers, {
     eager: true,
   })
-  @JoinTable()
-  subjects: SubjectEntity[];
+  @JoinColumn({ name: 'subject_id' })
+  subject: SubjectEntity;
 
   @OneToMany(() => QuestionEntity, (question) => question.quiz)
   questions: QuestionEntity[];

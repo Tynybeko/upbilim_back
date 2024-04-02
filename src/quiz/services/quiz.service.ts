@@ -178,7 +178,7 @@ export class QuizService {
       limit,
       relationFilterQuery,
       relations: [
-        { entity: 'subject', field: 'subjects' },
+        { entity: 'subject', field: 'subject' },
         { entity: 'user', field: 'user' },
         { entity: 'group', field: 'group' },
         { entity: 'lang', field: 'lang' },
@@ -187,7 +187,7 @@ export class QuizService {
   }
 
   async findOne(id: number): Promise<QuizEntity> {
-    const quiz = await this.quizRepository.findOne({ where: { id } });
+    const quiz = await this.quizRepository.findOne({ where: { id }, relations: ['group', 'lang', 'subject'] });
     if (!quiz) throw new NotFoundException({ message: 'Quiz not found' });
     return quiz;
   }
@@ -200,9 +200,11 @@ export class QuizService {
     const temp = { image: null };
 
     if (subject) {
-      quiz.subjects = await this.subjectRepository.findBy({
-        id: subject,
-      });
+      quiz.subject = await this.utils.getObjectOr404<SubjectEntity>(
+        this.subjectRepository,
+        { where: { id: subject } },
+        'Subject',
+      );
     }
     if (lang) {
       quiz.lang = await this.utils.getObjectOr404<LangEntity>(

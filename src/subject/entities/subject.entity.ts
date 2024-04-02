@@ -1,5 +1,5 @@
 import { BaseStaticEntity } from '../../options/base-entity.options';
-import { Column, Entity, ManyToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { QuizEntity } from '../../quiz/entities/quiz.entity';
 import { GroupEntity } from 'src/group/entities/group.entity';
 
@@ -20,7 +20,7 @@ export class SubjectEntity extends BaseStaticEntity {
   @Column({})
   label_en: string;
 
-  @ManyToMany(() => QuizEntity, (quiz) => quiz.subjects)
+  @OneToMany(() => QuizEntity, (quiz) => quiz.subject)
   quizzers: QuizEntity[];
 
   @ManyToOne(() => GroupEntity)
