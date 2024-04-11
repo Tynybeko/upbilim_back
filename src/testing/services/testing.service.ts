@@ -41,7 +41,7 @@ export class TestingService {
     );
 
     temp['quiz'] = quizObject;
-    if (!quizObject.isFrozen) {
+    if (quizObject.isFrozen) {
       throw new ForbiddenException({
         message: 'Quiz is frozen. You cannot use this quiz',
       });
